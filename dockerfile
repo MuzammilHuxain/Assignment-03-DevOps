@@ -1,19 +1,19 @@
-# Use official Node.js runtime as base image
+# Use official Node.js Alpine image
 FROM node:18-alpine
 
-# Install curl for health checks
-RUN apk add --no-cache curl
+# Install build tools for native modules
+RUN apk add --no-cache python3 make g++ curl
 
 # Set working directory
 WORKDIR /app
 
-# Copy package files
+# Copy package files only
 COPY package*.json ./
 
-# Install dependencies
+# Install dependencies (inside container)
 RUN npm install
 
-# Copy application code
+# Copy rest of the app (excluding node_modules via .dockerignore)
 COPY . .
 
 # Expose port
